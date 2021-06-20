@@ -12,12 +12,14 @@ set(HEADERDEF "${VERSION_MAJOR}_${VERSION_MINOR}_${VERSION_MICRO}")
 project(rpi_ws281x VERSION ${PROJECT_VERSION})
 
 option(BUILD_SHARED "Build as shared library" OFF)
-option(BUILD_TEST "Build test application" ON)
+option(BUILD_TEST "Build test application" OFF)
+option(BUILD_BLCTRL "Build test application" ON)
 
 set(CMAKE_C_STANDARD 11)
 
 set(LIB_TARGET ws2811)
 set(TEST_TARGET test)
+set(BLCTRL_TARGET blctrl)
 
 set(LIB_PUBLIC_HEADERS
     ws2811.h
@@ -40,6 +42,10 @@ set(LIB_SOURCES
 )
 
 set(TEST_SOURCES
+    main.c
+)
+
+set(BLCTRL_SOURCES
     main.c
 )
 
@@ -76,4 +82,11 @@ if(BUILD_TEST)
 
     add_executable(${TEST_TARGET} ${TEST_SOURCES})
     target_link_libraries(${TEST_TARGET} ${LIB_TARGET})
+endif()
+
+if(BUILD_BLCTRL)
+    include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+    add_executable(${BLCTRL_TARGET} ${BLCTRL_SOURCES})
+    target_link_libraries(${BLCTRL_TARGET} ${LIB_TARGET})
 endif()
